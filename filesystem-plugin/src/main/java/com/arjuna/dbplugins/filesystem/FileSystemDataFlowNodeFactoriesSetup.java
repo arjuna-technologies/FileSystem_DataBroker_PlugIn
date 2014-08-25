@@ -11,11 +11,10 @@ import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-
 import com.arjuna.databroker.data.DataFlowNodeFactory;
 import com.arjuna.databroker.data.DataFlowNodeFactoryInventory;
 import com.arjuna.dbplugins.filesystem.file.FileChangeDataFlowNodeFactory;
-import com.arjuna.dbplugins.filesystem.file.FileChangeDataFlowNodeFactory;
+import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataFlowNodeFactory;
 
 @Startup
 @Singleton
@@ -25,7 +24,7 @@ public class FileSystemDataFlowNodeFactoriesSetup
     public void setup()
     {
         DataFlowNodeFactory fileChangeDataFlowNodeFactory      = new FileChangeDataFlowNodeFactory("File Change Data Flow Node Factories", Collections.<String, String>emptyMap());
-        DataFlowNodeFactory directoryChangeDataFlowNodeFactory = new FileChangeDataFlowNodeFactory("Directory Change Data Flow Node Factories", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory directoryChangeDataFlowNodeFactory = new DirectoryChangeDataFlowNodeFactory("Directory Change Data Flow Node Factories", Collections.<String, String>emptyMap());
 
         _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(fileChangeDataFlowNodeFactory);
         _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(directoryChangeDataFlowNodeFactory);

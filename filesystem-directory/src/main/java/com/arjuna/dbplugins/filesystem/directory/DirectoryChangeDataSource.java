@@ -5,7 +5,13 @@
 package com.arjuna.dbplugins.filesystem.directory;
 
 import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchEvent.Kind;
 import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -70,27 +76,58 @@ public class DirectoryChangeDataSource implements DataSource
             return null;
     }
 
+    public void finish()
+    {
+    	_watcher.finish();
+    }
+    
     private class Watcher extends Thread
     {
-    	public Watcher(File directory)
-    	{
-    		_directory = directory;
-    	}
+        public Watcher(File directory)
+        {
+            _directoryPath = directory.toPath();
+        }
 
-    	@Override
-    	public void run()
-    	{
-    		try
-    		{
-    			WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
-    		}
-    		catch (Throwable throwable)
-    		{
-    			logger.log(Level.WARNING, "Problem while watching directory", throwable);
-    		}
-    	}
+        @Override
+        public void run()
+        {
+            try
+            {
+                WatchService watchService = FileSystems.getDefault().newWatchService();
+                _directoryPath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY);
 
-    	private File _directory;
+                while (! _finish)
+                {
+                	WatchKey watchKey = watchService.poll();
+
+                	for (WatchEvent<?> watchEvent : watchKey.pollEvents())
+                	{
+                		final Kind<?> kind = watchEvent.kind();
+
+                		if (kind == StandardWatchEventKinds.ENTRY_CREATE)
+                			_dataProvider.produce(((Path) watchEvent.context()).toFile());
+                	}
+
+                	if (! watchKey.reset())
+    					_finish = true;
+                }
+
+                watchService.close();
+            }
+            catch (Throwable throwable)
+            {
+                logger.log(Level.WARNING, "Problem while watching directory", throwable);
+            }
+        }
+
+        public void finish()
+        {
+        	_finish = true;
+        	this.interrupt();
+        }
+
+        private Path    _directoryPath;
+        private boolean _finish;
     }
 
     private String              _name;
