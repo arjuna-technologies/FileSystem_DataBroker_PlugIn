@@ -71,6 +71,8 @@ public class FileChangeDataFlowNodeFactory implements DataFlowNodeFactory
             {
                 List<String> propertyNames = new LinkedList<String>();
 
+                propertyNames.add(FileChangeDataSource.FILENAME_PROPERYNAME);
+
                 return propertyNames;
             }
             else

@@ -2,7 +2,7 @@
  * Copyright (c) 2014, Arjuna Technologies Limited, Newcastle-upon-Tyne, England. All rights reserved.
  */
 
-package com.arjuna.dbplugins.tests.filesystem.directory;
+package com.arjuna.dbplugins.tests.filesystem.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,24 +12,24 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
-import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataSource;
+import com.arjuna.dbplugins.filesystem.file.FileChangeDataSource;
 
-public class DirectoryChangeDataSourceTest
+public class FileChangeDataSourceTest
 {
-    private static final Logger logger = Logger.getLogger(DirectoryChangeDataSourceTest.class.getName());
+    private static final Logger logger = Logger.getLogger(FileChangeDataSourceTest.class.getName());
 
     @Test
-    public void directoryScanner01()
+    public void fileScanner01()
     {
         try
         {
             File testDirectory = createTemporaryDirectory("Scanner01");
 
-            String              name       = "Directory Change Data Source";
+            String              name       = "File Change Data Source";
             Map<String, String> properties = new HashMap<String, String>();
-            properties.put(DirectoryChangeDataSource.DIRECTORYNAME_PROPERYNAME, testDirectory.toString());
+            properties.put(FileChangeDataSource.FILENAME_PROPERYNAME, testDirectory.toString() + File.separator + "Test02");
 
-            DirectoryChangeDataSource directoryChangeDataSource = new DirectoryChangeDataSource(name, properties);
+            FileChangeDataSource fileChangeDataSource = new FileChangeDataSource(name, properties);
 
             Thread.sleep(1000);
 
@@ -45,11 +45,11 @@ public class DirectoryChangeDataSourceTest
             testFile3.createNewFile();
             Thread.sleep(1000);
 
-            directoryChangeDataSource.finish();
+            fileChangeDataSource.finish();
         }
         catch (Throwable throwable)
         {
-            logger.log(Level.WARNING, "Problem in 'directoryScanner01'", throwable);
+            logger.log(Level.WARNING, "Problem in 'fileScanner01'", throwable);
         }
     }
 

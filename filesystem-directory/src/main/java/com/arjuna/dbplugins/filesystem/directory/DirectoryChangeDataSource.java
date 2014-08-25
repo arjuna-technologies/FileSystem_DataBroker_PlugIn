@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.risbic.intraconnect.basic.BasicDataProvider;
@@ -105,11 +104,8 @@ public class DirectoryChangeDataSource implements DataSource
                         {
                             final Kind<?> kind = watchEvent.kind();
         
-                            if (kind == StandardWatchEventKinds.ENTRY_CREATE)
-                            {
-                                logger.log(Level.WARNING, "Found: " + ((Path) watchEvent.context()).toFile());
+                            if ((kind == StandardWatchEventKinds.ENTRY_CREATE) || (kind == StandardWatchEventKinds.ENTRY_MODIFY))
                                 _dataProvider.produce(((Path) watchEvent.context()).toFile());
-                            }
                         }
 
                         if (! watchKey.reset())
@@ -138,7 +134,7 @@ public class DirectoryChangeDataSource implements DataSource
             }
             catch (Throwable throwable)
             {
-                logger.log(Level.WARNING, "Problem during watcher shutdown", throwable);
+                logger.log(Level.WARNING, "Problem during directory watcher shutdown", throwable);
             }
         }
 
