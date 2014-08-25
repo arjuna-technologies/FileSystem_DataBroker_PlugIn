@@ -17,11 +17,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.risbic.intraconnect.basic.BasicDataProvider;
-
 import com.arjuna.databroker.data.DataProvider;
 import com.arjuna.databroker.data.DataSource;
 
@@ -29,7 +28,7 @@ public class DirectoryChangeDataSource implements DataSource
 {
     private static final Logger logger = Logger.getLogger(DirectoryChangeDataSource.class.getName());
 
-    private static final String DIRECTORYNAME_PROPERYNAME = "Directory Name";
+    public static final String DIRECTORYNAME_PROPERYNAME = "Directory Name";
 
     public DirectoryChangeDataSource(String name, Map<String, String> properties)
     {
@@ -78,7 +77,7 @@ public class DirectoryChangeDataSource implements DataSource
 
     public void finish()
     {
-    	_watcher.finish();
+        _watcher.finish();
     }
     
     private class Watcher extends Thread
@@ -98,21 +97,30 @@ public class DirectoryChangeDataSource implements DataSource
 
                 while (! _finish)
                 {
-                	WatchKey watchKey = watchService.poll();
+                    WatchKey watchKey = watchService.take();
 
-                	for (WatchEvent<?> watchEvent : watchKey.pollEvents())
-                	{
-                		final Kind<?> kind = watchEvent.kind();
+                    if (watchKey != null)
+                    {
+                        for (WatchEvent<?> watchEvent : watchKey.pollEvents())
+                        {
+                            final Kind<?> kind = watchEvent.kind();
+        
+                            if (kind == StandardWatchEventKinds.ENTRY_CREATE)
+                            {
+                                logger.log(Level.WARNING, "Found: " + ((Path) watchEvent.context()).toFile());
+                                _dataProvider.produce(((Path) watchEvent.context()).toFile());
+                            }
+                        }
 
-                		if (kind == StandardWatchEventKinds.ENTRY_CREATE)
-                			_dataProvider.produce(((Path) watchEvent.context()).toFile());
-                	}
-
-                	if (! watchKey.reset())
-    					_finish = true;
+                        if (! watchKey.reset())
+                            _finish = true;
+                    }
                 }
 
                 watchService.close();
+            }
+            catch (InterruptedException interruptedException)
+            {
             }
             catch (Throwable throwable)
             {
@@ -122,8 +130,16 @@ public class DirectoryChangeDataSource implements DataSource
 
         public void finish()
         {
-        	_finish = true;
-        	this.interrupt();
+            try
+            {
+                _finish = true;
+                this.interrupt();
+                this.join();
+            }
+            catch (Throwable throwable)
+            {
+                logger.log(Level.WARNING, "Problem during watcher shutdown", throwable);
+            }
         }
 
         private Path    _directoryPath;
