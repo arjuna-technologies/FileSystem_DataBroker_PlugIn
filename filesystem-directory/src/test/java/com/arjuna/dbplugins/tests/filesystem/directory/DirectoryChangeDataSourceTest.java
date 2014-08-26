@@ -7,12 +7,15 @@ package com.arjuna.dbplugins.tests.filesystem.directory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataSource;
+import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSink;
 
 public class DirectoryChangeDataSourceTest
 {
@@ -30,6 +33,8 @@ public class DirectoryChangeDataSourceTest
             properties.put(DirectoryChangeDataSource.DIRECTORYNAME_PROPERYNAME, testDirectory.toString());
 
             DirectoryChangeDataSource directoryChangeDataSource = new DirectoryChangeDataSource(name, properties);
+            DummyDataSink             dummyDataSink             = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
+            directoryChangeDataSource.getDataProvider(File.class).addDataConsumer(dummyDataSink.getDataConsumer(File.class));
 
             Thread.sleep(1000);
 
@@ -46,10 +51,13 @@ public class DirectoryChangeDataSourceTest
             Thread.sleep(1000);
 
             directoryChangeDataSource.finish();
+
+            assertEquals("Incorrect message number", 3, dummyDataSink.receivedData().size());
         }
         catch (Throwable throwable)
         {
             logger.log(Level.WARNING, "Problem in 'directoryScanner01'", throwable);
+            fail("Problem in 'directoryScanner01': " + throwable);
         }
     }
 

@@ -4,15 +4,19 @@
 
 package com.arjuna.dbplugins.tests.filesystem.file;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
 import com.arjuna.dbplugins.filesystem.file.FileChangeDataSource;
+import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSink;
 
 public class FileChangeDataSourceTest
 {
@@ -29,7 +33,9 @@ public class FileChangeDataSourceTest
             Map<String, String> properties = new HashMap<String, String>();
             properties.put(FileChangeDataSource.FILENAME_PROPERYNAME, testDirectory.toString() + File.separator + "Test02");
 
-            FileChangeDataSource fileChangeDataSource = new FileChangeDataSource(name, properties);
+            FileChangeDataSource      fileChangeDataSource = new FileChangeDataSource(name, properties);
+            DummyDataSink             dummyDataSink        = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
+            fileChangeDataSource.getDataProvider(File.class).addDataConsumer(dummyDataSink.getDataConsumer(File.class));
 
             Thread.sleep(1000);
 
@@ -46,10 +52,14 @@ public class FileChangeDataSourceTest
             Thread.sleep(1000);
 
             fileChangeDataSource.finish();
+
+            assertEquals("Incorrect message number", 1, dummyDataSink.receivedData().size());
         }
         catch (Throwable throwable)
         {
             logger.log(Level.WARNING, "Problem in 'fileScanner01'", throwable);
+
+            fail("Problem in 'fileScanner01': " + throwable);
         }
     }
 
