@@ -67,7 +67,7 @@ public class FileChangeDataFlowNodeFactory implements DataFlowNodeFactory
     {
         if (dataFlowNodeClass.equals(DataSource.class))
         {
-            if (! metaProperties.isEmpty())
+            if (metaProperties.isEmpty())
             {
                 List<String> propertyNames = new LinkedList<String>();
 
@@ -89,7 +89,7 @@ public class FileChangeDataFlowNodeFactory implements DataFlowNodeFactory
     {
         if (dataFlowNodeClass.equals(DataSource.class))
         {
-            if (! metaProperties.isEmpty())
+            if (metaProperties.isEmpty())
                 return (T) new FileChangeDataSource(name, properties);
             else
                 throw new InvalidMetaPropertyException("No metaproperties expected", null, null);
