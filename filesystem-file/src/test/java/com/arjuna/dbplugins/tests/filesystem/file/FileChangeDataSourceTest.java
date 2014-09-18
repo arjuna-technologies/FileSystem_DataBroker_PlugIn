@@ -6,6 +6,7 @@ package com.arjuna.dbplugins.tests.filesystem.file;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.junit.Test;
+
+import com.arjuna.databroker.data.connector.ObservableDataProvider;
+import com.arjuna.databroker.data.connector.ObserverDataConsumer;
+import com.arjuna.databroker.data.jee.DataFlowNodeLifeCycleControl;
 import com.arjuna.dbplugins.filesystem.file.FileChangeDataSource;
 import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSink;
 
@@ -33,9 +39,12 @@ public class FileChangeDataSourceTest
             Map<String, String> properties = new HashMap<String, String>();
             properties.put(FileChangeDataSource.FILENAME_PROPERYNAME, testDirectory.toString() + File.separator + "Test02");
 
-            FileChangeDataSource      fileChangeDataSource = new FileChangeDataSource(name, properties);
-            DummyDataSink             dummyDataSink        = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
-            fileChangeDataSource.getDataProvider(File.class).addDataConsumer(dummyDataSink.getDataConsumer(File.class));
+            FileChangeDataSource fileChangeDataSource = new FileChangeDataSource(name, properties);
+            DummyDataSink        dummyDataSink        = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
+
+            DataFlowNodeLifeCycleControl.processCreatedDataFlowNode(fileChangeDataSource, null);
+
+            ((ObservableDataProvider<File>) fileChangeDataSource.getDataProvider(File.class)).addDataConsumer((ObserverDataConsumer<File>) dummyDataSink.getDataConsumer(File.class));
 
             Thread.sleep(1000);
 

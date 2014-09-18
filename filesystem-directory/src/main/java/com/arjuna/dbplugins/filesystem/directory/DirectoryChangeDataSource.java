@@ -19,9 +19,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.risbic.intraconnect.basic.BasicDataProvider;
+
+import com.arjuna.databroker.data.DataFlow;
 import com.arjuna.databroker.data.DataProvider;
 import com.arjuna.databroker.data.DataSource;
+import com.arjuna.databroker.data.jee.annotation.DataProviderInjection;
 
 public class DirectoryChangeDataSource implements DataSource
 {
@@ -36,10 +38,20 @@ public class DirectoryChangeDataSource implements DataSource
         _name       = name;
         _properties = properties;
 
-        _dataProvider = new BasicDataProvider<File>(this);
-
         _watcher = new Watcher(new File(_properties.get(DIRECTORYNAME_PROPERYNAME)));
         _watcher.start();
+    }
+
+    @Override
+    public DataFlow getDataFlow()
+    {
+        return _dataFlow;
+    }
+
+    @Override
+    public void setDataFlow(DataFlow dataFlow)
+    {
+        _dataFlow = dataFlow;
     }
 
     @Override
@@ -49,9 +61,21 @@ public class DirectoryChangeDataSource implements DataSource
     }
 
     @Override
+    public void setName(String name)
+    {
+        _name = name;
+    }
+
+    @Override
     public Map<String, String> getProperties()
     {
         return Collections.unmodifiableMap(_properties);
+    }
+
+    @Override
+    public void setProperties(Map<String, String> properties)
+    {
+        _properties = properties;
     }
 
     @Override
@@ -142,8 +166,10 @@ public class DirectoryChangeDataSource implements DataSource
         private boolean _finish;
     }
 
+    private DataFlow            _dataFlow;
     private String              _name;
     private Map<String, String> _properties;
+    @DataProviderInjection
     private DataProvider<File>  _dataProvider;
 
     private Watcher _watcher;

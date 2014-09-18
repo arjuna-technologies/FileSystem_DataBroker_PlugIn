@@ -12,8 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
+import com.arjuna.databroker.data.connector.ObservableDataProvider;
+import com.arjuna.databroker.data.connector.ObserverDataConsumer;
+import com.arjuna.databroker.data.jee.DataFlowNodeLifeCycleControl;
 import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataSource;
 import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSink;
 
@@ -34,7 +40,10 @@ public class DirectoryChangeDataSourceTest
 
             DirectoryChangeDataSource directoryChangeDataSource = new DirectoryChangeDataSource(name, properties);
             DummyDataSink             dummyDataSink             = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
-            directoryChangeDataSource.getDataProvider(File.class).addDataConsumer(dummyDataSink.getDataConsumer(File.class));
+
+            DataFlowNodeLifeCycleControl.processCreatedDataFlowNode(directoryChangeDataSource, null);
+
+            ((ObservableDataProvider<File>) directoryChangeDataSource.getDataProvider(File.class)).addDataConsumer((ObserverDataConsumer<File>) dummyDataSink.getDataConsumer(File.class));
 
             Thread.sleep(1000);
 
