@@ -24,6 +24,8 @@ import com.arjuna.databroker.data.DataFlow;
 import com.arjuna.databroker.data.DataProvider;
 import com.arjuna.databroker.data.DataSource;
 import com.arjuna.databroker.data.jee.annotation.DataProviderInjection;
+import com.arjuna.databroker.data.jee.annotation.PreActivated;
+import com.arjuna.databroker.data.jee.annotation.PreDeactivated;
 
 public class DirectoryChangeDataSource implements DataSource
 {
@@ -37,9 +39,6 @@ public class DirectoryChangeDataSource implements DataSource
 
         _name       = name;
         _properties = properties;
-
-        _watcher = new Watcher(new File(_properties.get(DIRECTORYNAME_PROPERYNAME)));
-        _watcher.start();
     }
 
     @Override
@@ -98,11 +97,19 @@ public class DirectoryChangeDataSource implements DataSource
             return null;
     }
 
+    @PreActivated
+    public void start()
+    {
+        _watcher = new Watcher(new File(_properties.get(DIRECTORYNAME_PROPERYNAME)));
+        _watcher.start();
+    }
+
+    @PreDeactivated
     public void finish()
     {
         _watcher.finish();
     }
-    
+
     private class Watcher extends Thread
     {
         public Watcher(File directory)

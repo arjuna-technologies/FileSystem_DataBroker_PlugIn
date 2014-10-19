@@ -19,10 +19,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.arjuna.databroker.data.DataFlow;
 import com.arjuna.databroker.data.DataProvider;
 import com.arjuna.databroker.data.DataSource;
 import com.arjuna.databroker.data.jee.annotation.DataProviderInjection;
+import com.arjuna.databroker.data.jee.annotation.PreActivated;
+import com.arjuna.databroker.data.jee.annotation.PreDeactivated;
 
 public class FileChangeDataSource implements DataSource
 {
@@ -36,9 +39,6 @@ public class FileChangeDataSource implements DataSource
 
         _name       = name;
         _properties = properties;
-
-        _watcher = new Watcher(new File(_properties.get(FILENAME_PROPERYNAME)));
-        _watcher.start();
     }
 
     @Override
@@ -97,6 +97,14 @@ public class FileChangeDataSource implements DataSource
             return null;
     }
 
+    @PreActivated
+    public void start()
+    {
+        _watcher = new Watcher(new File(_properties.get(FILENAME_PROPERYNAME)));
+        _watcher.start();
+    }
+
+    @PreDeactivated
     public void finish()
     {
         _watcher.finish();
