@@ -1,7 +1,12 @@
 FileSystem_DataBroker_PlugIn
 ============================
 
-FileSystem DataBroker PlugIn
+FileSystem DataBroker PlugIn:
+
+- File scanner
+
+- Directory scanner
+
 
 License
 =======
