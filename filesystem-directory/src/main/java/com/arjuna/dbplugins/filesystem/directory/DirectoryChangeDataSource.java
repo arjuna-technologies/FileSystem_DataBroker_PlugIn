@@ -114,6 +114,7 @@ public class DirectoryChangeDataSource implements DataSource
     {
         public Watcher(File directory)
         {
+            _finish        = false;
             _directoryPath = directory.toPath();
         }
 

@@ -114,6 +114,7 @@ public class FileChangeDataSource implements DataSource
     {
         public Watcher(File file)
         {
+            _finish        = false;
             _filePath      = file.toPath().toAbsolutePath();
             _directoryPath = file.getParentFile().toPath().toAbsolutePath();
         }
