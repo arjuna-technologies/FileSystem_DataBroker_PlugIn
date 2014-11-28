@@ -13,8 +13,8 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import com.arjuna.databroker.data.DataFlowNodeFactory;
 import com.arjuna.databroker.data.DataFlowNodeFactoryInventory;
-import com.arjuna.dbplugins.filesystem.file.FileChangeDataFlowNodeFactory;
-import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataFlowNodeFactory;
+import com.arjuna.dbplugins.filesystem.file.FileChangeDataSourceFactory;
+import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataSourceFactory;
 
 @Startup
 @Singleton
@@ -23,18 +23,18 @@ public class FileSystemDataFlowNodeFactoriesSetup
     @PostConstruct
     public void setup()
     {
-        DataFlowNodeFactory fileChangeDataFlowNodeFactory      = new FileChangeDataFlowNodeFactory("File Change Data Flow Node Factories", Collections.<String, String>emptyMap());
-        DataFlowNodeFactory directoryChangeDataFlowNodeFactory = new DirectoryChangeDataFlowNodeFactory("Directory Change Data Flow Node Factories", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory fileChangeDataSourceFactory      = new FileChangeDataSourceFactory("File Change Data Source Factory", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory directoryChangeDataSourceFactory = new DirectoryChangeDataSourceFactory("Directory Change Data Source Factory", Collections.<String, String>emptyMap());
 
-        _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(fileChangeDataFlowNodeFactory);
-        _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(directoryChangeDataFlowNodeFactory);
+        _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(fileChangeDataSourceFactory);
+        _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(directoryChangeDataSourceFactory);
     }
 
     @PreDestroy
     public void cleanup()
     {
-        _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("File Change Data Flow Node Factories");
-        _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("Directory Change Data Flow Node Factories");
+        _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("File Change Data Source Factory");
+        _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("Directory Change Data Source Factory");
     }
 
     @EJB(lookup="java:global/databroker/control-core/DataFlowNodeFactoryInventory")

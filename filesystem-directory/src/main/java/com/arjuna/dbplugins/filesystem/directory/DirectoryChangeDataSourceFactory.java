@@ -2,7 +2,7 @@
  * Copyright (c) 2014, Arjuna Technologies Limited, Newcastle-upon-Tyne, England. All rights reserved.
  */
 
-package com.arjuna.dbplugins.filesystem.file;
+package com.arjuna.dbplugins.filesystem.directory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,9 +17,9 @@ import com.arjuna.databroker.data.InvalidPropertyException;
 import com.arjuna.databroker.data.MissingMetaPropertyException;
 import com.arjuna.databroker.data.MissingPropertyException;
 
-public class FileChangeDataFlowNodeFactory implements DataFlowNodeFactory
+public class DirectoryChangeDataSourceFactory implements DataFlowNodeFactory
 {
-    public FileChangeDataFlowNodeFactory(String name, Map<String, String> properties)
+    public DirectoryChangeDataSourceFactory(String name, Map<String, String> properties)
     {
         _name       = name;
         _properties = properties;
@@ -71,8 +71,8 @@ public class FileChangeDataFlowNodeFactory implements DataFlowNodeFactory
             {
                 List<String> propertyNames = new LinkedList<String>();
 
-                propertyNames.add(FileChangeDataSource.FILENAME_PROPERYNAME);
-
+                propertyNames.add(DirectoryChangeDataSource.DIRECTORYNAME_PROPERYNAME);
+                
                 return propertyNames;
             }
             else
@@ -90,7 +90,7 @@ public class FileChangeDataFlowNodeFactory implements DataFlowNodeFactory
         if (dataFlowNodeClass.equals(DataSource.class))
         {
             if (metaProperties.isEmpty())
-                return (T) new FileChangeDataSource(name, properties);
+                return (T) new DirectoryChangeDataSource(name, properties);
             else
                 throw new InvalidMetaPropertyException("No metaproperties expected", null, null);
         }
