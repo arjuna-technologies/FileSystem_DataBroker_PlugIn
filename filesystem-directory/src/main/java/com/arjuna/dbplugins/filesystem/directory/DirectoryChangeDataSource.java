@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.arjuna.databroker.data.DataFlow;
 import com.arjuna.databroker.data.DataProvider;
 import com.arjuna.databroker.data.DataSource;
@@ -135,9 +134,10 @@ public class DirectoryChangeDataSource implements DataSource
                         for (WatchEvent<?> watchEvent : watchKey.pollEvents())
                         {
                             final Kind<?> kind = watchEvent.kind();
-        
+
+                            Path context = _directoryPath.resolve((Path) watchEvent.context());
                             if ((kind == StandardWatchEventKinds.ENTRY_CREATE) || (kind == StandardWatchEventKinds.ENTRY_MODIFY))
-                                _dataProvider.produce(((Path) watchEvent.context()).toFile());
+                                _dataProvider.produce(context.toFile());
                         }
 
                         if (! watchKey.reset())
