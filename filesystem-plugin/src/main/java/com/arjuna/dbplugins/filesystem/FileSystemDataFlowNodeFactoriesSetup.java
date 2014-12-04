@@ -16,6 +16,7 @@ import com.arjuna.dbplugins.filesystem.file.FileChangeDataSourceFactory;
 import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataSourceFactory;
 import com.arjuna.dbplugins.filesystem.file.FileReaderDataProcessorFactory;
 import com.arjuna.dbplugins.filesystem.file.FileUpdateDataServiceFactory;
+import com.arjuna.dbplugins.filesystem.file.PollingFileChangeDataSourceFactory;
 import com.arjuna.dbplugins.filesystem.directory.DirectoryUpdateDataServiceFactory;
 
 @Startup
@@ -25,13 +26,15 @@ public class FileSystemDataFlowNodeFactoriesSetup
     @PostConstruct
     public void setup()
     {
-        DataFlowNodeFactory fileChangeDataSourceFactory       = new FileChangeDataSourceFactory("File Change Data Source Factory", Collections.<String, String>emptyMap());
-        DataFlowNodeFactory directoryChangeDataSourceFactory  = new DirectoryChangeDataSourceFactory("Directory Change Data Source Factory", Collections.<String, String>emptyMap());
-        DataFlowNodeFactory fileReaderDataProcessorFactory    = new FileReaderDataProcessorFactory("File Reader Data Processor Factory", Collections.<String, String>emptyMap());
-        DataFlowNodeFactory fileUpdateDataServiceFactory      = new FileUpdateDataServiceFactory("File Update Data Service Factory", Collections.<String, String>emptyMap());
-        DataFlowNodeFactory directoryUpdateDataServiceFactory = new DirectoryUpdateDataServiceFactory("Directory Update Data Service Factory", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory fileChangeDataSourceFactory        = new FileChangeDataSourceFactory("File Change Data Source Factory", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory pollingFileChangeDataSourceFactory = new PollingFileChangeDataSourceFactory("Polling File Change Data Source Factory", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory directoryChangeDataSourceFactory   = new DirectoryChangeDataSourceFactory("Directory Change Data Source Factory", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory fileReaderDataProcessorFactory     = new FileReaderDataProcessorFactory("File Reader Data Processor Factory", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory fileUpdateDataServiceFactory       = new FileUpdateDataServiceFactory("File Update Data Service Factory", Collections.<String, String>emptyMap());
+        DataFlowNodeFactory directoryUpdateDataServiceFactory  = new DirectoryUpdateDataServiceFactory("Directory Update Data Service Factory", Collections.<String, String>emptyMap());
 
         _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(fileChangeDataSourceFactory);
+        _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(pollingFileChangeDataSourceFactory);
         _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(fileReaderDataProcessorFactory);
         _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(fileUpdateDataServiceFactory);
         _dataFlowNodeFactoryInventory.addDataFlowNodeFactory(directoryChangeDataSourceFactory);
@@ -42,6 +45,7 @@ public class FileSystemDataFlowNodeFactoriesSetup
     public void cleanup()
     {
         _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("File Change Data Source Factory");
+        _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("Polling File Change Data Source Factory");
         _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("Directory Change Data Source Factory");
         _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("File Reader Data Processor Factory");
         _dataFlowNodeFactoryInventory.removeDataFlowNodeFactory("File Update Data Service Factory");
