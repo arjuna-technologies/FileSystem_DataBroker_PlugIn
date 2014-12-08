@@ -72,6 +72,8 @@ public class DirectoryUpdateDataServiceFactory implements DataFlowNodeFactory
                 List<String> propertyNames = new LinkedList<String>();
 
                 propertyNames.add(DirectoryUpdateDataService.DIRECTORYNAME_PROPERYNAME);
+                propertyNames.add(DirectoryUpdateDataService.FILENAMEPREFIX_PROPERYNAME);
+                propertyNames.add(DirectoryUpdateDataService.FILENAMEPOSTFIX_PROPERYNAME);
 
                 return propertyNames;
             }

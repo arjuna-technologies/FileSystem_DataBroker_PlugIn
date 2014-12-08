@@ -27,7 +27,9 @@ public class DirectoryUpdateDataService implements DataService
 {
     private static final Logger logger = Logger.getLogger(DirectoryUpdateDataService.class.getName());
 
-    public static final String DIRECTORYNAME_PROPERYNAME = "Directory Name";
+    public static final String DIRECTORYNAME_PROPERYNAME   = "Directory Name";
+    public static final String FILENAMEPREFIX_PROPERYNAME  = "File Name Prefix";
+    public static final String FILENAMEPOSTFIX_PROPERYNAME = "File Name Postfix";
 
     public DirectoryUpdateDataService(String name, Map<String, String> properties)
     {
@@ -81,7 +83,9 @@ public class DirectoryUpdateDataService implements DataService
     {
         try
         {
-            _directory = new File(_properties.get(DIRECTORYNAME_PROPERYNAME));
+            _directory       = new File(_properties.get(DIRECTORYNAME_PROPERYNAME));
+            _fileNamePrefix  = _properties.get(FILENAMEPREFIX_PROPERYNAME);
+            _fileNamePostfix = _properties.get(FILENAMEPOSTFIX_PROPERYNAME);
         }
         catch (Throwable throwable)
         {
@@ -95,7 +99,7 @@ public class DirectoryUpdateDataService implements DataService
         {
             if (_directory != null)
             {
-                FileOutputStream fileOutputStream = new FileOutputStream(new File(_directory, UUID.randomUUID().toString()));
+                FileOutputStream fileOutputStream = new FileOutputStream(new File(_directory, _fileNamePrefix + UUID.randomUUID().toString() + _fileNamePostfix));
                 fileOutputStream.write(data.getBytes());
                 fileOutputStream.close();
             }
@@ -148,8 +152,10 @@ public class DirectoryUpdateDataService implements DataService
             return null;
     }
 
-    private File _directory;
-    
+    private File   _directory;
+    private String _fileNamePrefix;
+    private String _fileNamePostfix;
+
     private DataFlow             _dataFlow;
     private String               _name;
     private Map<String, String>  _properties;
