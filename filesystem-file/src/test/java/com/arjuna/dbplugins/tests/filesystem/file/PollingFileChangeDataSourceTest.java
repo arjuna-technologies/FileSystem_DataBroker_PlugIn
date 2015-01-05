@@ -12,14 +12,16 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
 import com.arjuna.databroker.data.connector.ObservableDataProvider;
 import com.arjuna.databroker.data.connector.ObserverDataConsumer;
-import com.arjuna.databroker.data.jee.DataFlowNodeLifeCycleControl;
+import com.arjuna.databroker.data.core.DataFlowNodeLifeCycleControl;
 import com.arjuna.dbplugins.filesystem.file.PollingFileChangeDataSource;
 import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSink;
+import com.arjuna.dbutilities.testsupport.dataflownodes.lifecycle.TestJEEDataFlowNodeLifeCycleControl;
 
 public class PollingFileChangeDataSourceTest
 {
@@ -30,6 +32,8 @@ public class PollingFileChangeDataSourceTest
     {
         try
         {
+            DataFlowNodeLifeCycleControl dataFlowNodeLifeCycleControl = new TestJEEDataFlowNodeLifeCycleControl();
+
             File testDirectory = createTemporaryDirectory("Scanner01");
 
             String              name       = "Polling File Change Data Source";
@@ -40,7 +44,8 @@ public class PollingFileChangeDataSourceTest
             PollingFileChangeDataSource pollingFileChangeDataSource = new PollingFileChangeDataSource(name, properties);
             DummyDataSink               dummyDataSink               = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
 
-            DataFlowNodeLifeCycleControl.processCreatedDataFlowNode(pollingFileChangeDataSource, null);
+            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), pollingFileChangeDataSource, null);
+            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
 
             ((ObservableDataProvider<File>) pollingFileChangeDataSource.getDataProvider(File.class)).addDataConsumer((ObserverDataConsumer<File>) dummyDataSink.getDataConsumer(File.class));
 
@@ -58,7 +63,8 @@ public class PollingFileChangeDataSourceTest
             testFile3.createNewFile();
             Thread.sleep(1000);
 
-            pollingFileChangeDataSource.finish();
+            dataFlowNodeLifeCycleControl.removeDataFlowNode(pollingFileChangeDataSource);
+            dataFlowNodeLifeCycleControl.removeDataFlowNode(dummyDataSink);
 
             assertEquals("Incorrect message number", 1, dummyDataSink.receivedData().size());
         }

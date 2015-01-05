@@ -10,15 +10,17 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import com.arjuna.databroker.data.connector.ObservableDataProvider;
 import com.arjuna.databroker.data.connector.ObserverDataConsumer;
-import com.arjuna.databroker.data.core.jee.DataFlowNodeLifeCycleControl;
+import com.arjuna.databroker.data.core.DataFlowNodeLifeCycleControl;
 import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataSource;
 import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSink;
+import com.arjuna.dbutilities.testsupport.dataflownodes.lifecycle.TestJEEDataFlowNodeLifeCycleControl;
 
 public class DirectoryChangeDataSourceTest
 {
@@ -29,6 +31,8 @@ public class DirectoryChangeDataSourceTest
     {
         try
         {
+            DataFlowNodeLifeCycleControl dataFlowNodeLifeCycleControl = new TestJEEDataFlowNodeLifeCycleControl();
+
             File testDirectory = createTemporaryDirectory("Scanner01");
 
             String              name       = "Directory Change Data Source";
@@ -38,7 +42,8 @@ public class DirectoryChangeDataSourceTest
             DirectoryChangeDataSource directoryChangeDataSource = new DirectoryChangeDataSource(name, properties);
             DummyDataSink             dummyDataSink             = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
 
-            DataFlowNodeLifeCycleControl.processCreatedDataFlowNode(directoryChangeDataSource, null);
+            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), directoryChangeDataSource, null);
+            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
 
             ((ObservableDataProvider<File>) directoryChangeDataSource.getDataProvider(File.class)).addDataConsumer((ObserverDataConsumer<File>) dummyDataSink.getDataConsumer(File.class));
 
@@ -56,7 +61,8 @@ public class DirectoryChangeDataSourceTest
             testFile3.createNewFile();
             Thread.sleep(1000);
 
-            directoryChangeDataSource.finish();
+            dataFlowNodeLifeCycleControl.removeDataFlowNode(directoryChangeDataSource);
+            dataFlowNodeLifeCycleControl.removeDataFlowNode(dummyDataSink);
 
             assertEquals("Incorrect message number", 3, dummyDataSink.receivedData().size());
         }
