@@ -26,6 +26,11 @@ public class PollingFileChangeDataSource implements DataSource
     public static final String FILENAME_PROPERYNAME     = "File Name";
     public static final String POLLINTERVAL_PROPERYNAME = "Poll Interval (ms)";
 
+    public PollingFileChangeDataSource()
+    {
+        logger.log(Level.FINE, "FileChangeDataSource");
+    }
+
     public PollingFileChangeDataSource(String name, Map<String, String> properties)
     {
         logger.log(Level.FINE, "FileChangeDataSource: " + name + ", " + properties);

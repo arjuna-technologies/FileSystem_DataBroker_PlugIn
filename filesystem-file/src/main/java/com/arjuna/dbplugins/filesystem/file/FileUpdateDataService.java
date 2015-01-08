@@ -28,6 +28,13 @@ public class FileUpdateDataService implements DataService
 
     public static final String FILENAME_PROPERYNAME = "File Name";
 
+    public FileUpdateDataService()
+    {
+        logger.log(Level.FINE, "FileUpdateDataService");
+
+        _file = null;
+    }
+
     public FileUpdateDataService(String name, Map<String, String> properties)
     {
         logger.log(Level.FINE, "FileUpdateDataService: " + name + ", " + properties);

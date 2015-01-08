@@ -33,6 +33,11 @@ public class FileChangeDataSource implements DataSource
 
     public static final String FILENAME_PROPERYNAME = "File Name";
 
+    public FileChangeDataSource()
+    {
+        logger.log(Level.FINE, "FileChangeDataSource");
+    }
+
     public FileChangeDataSource(String name, Map<String, String> properties)
     {
         logger.log(Level.FINE, "FileChangeDataSource: " + name + ", " + properties);

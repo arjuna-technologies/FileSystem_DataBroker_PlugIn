@@ -31,6 +31,13 @@ public class DirectoryUpdateDataService implements DataService
     public static final String FILENAMEPREFIX_PROPERYNAME  = "File Name Prefix";
     public static final String FILENAMEPOSTFIX_PROPERYNAME = "File Name Postfix";
 
+    public DirectoryUpdateDataService()
+    {
+        logger.log(Level.FINE, "DirectoryUpdateDataService");
+
+        _directory = null;
+    }
+
     public DirectoryUpdateDataService(String name, Map<String, String> properties)
     {
         logger.log(Level.FINE, "DirectoryUpdateDataService: " + name + ", " + properties);

@@ -25,6 +25,11 @@ public class FileReaderDataProcessor implements DataProcessor
 {
     private static final Logger logger = Logger.getLogger(FileReaderDataProcessor.class.getName());
 
+    public FileReaderDataProcessor()
+    {
+        logger.log(Level.FINE, "FileReaderDataProcessor");
+    }
+
     public FileReaderDataProcessor(String name, Map<String, String> properties)
     {
         logger.log(Level.FINE, "FileReaderDataProcessor: " + name + ", " + properties);

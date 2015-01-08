@@ -32,6 +32,11 @@ public class DirectoryChangeDataSource implements DataSource
 
     public static final String DIRECTORYNAME_PROPERYNAME = "Directory Name";
 
+    public DirectoryChangeDataSource()
+    {
+        logger.log(Level.FINE, "DirectoryChangeDataSource");
+    }
+
     public DirectoryChangeDataSource(String name, Map<String, String> properties)
     {
         logger.log(Level.FINE, "DirectoryChangeDataSource: " + name + ", " + properties);
