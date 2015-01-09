@@ -44,8 +44,8 @@ public class PollingFileChangeDataSourceTest
             PollingFileChangeDataSource pollingFileChangeDataSource = new PollingFileChangeDataSource(name, properties);
             DummyDataSink               dummyDataSink               = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
 
-            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), pollingFileChangeDataSource, null);
-            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
+            dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), pollingFileChangeDataSource, null);
+            dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
 
             ((ObservableDataProvider<File>) pollingFileChangeDataSource.getDataProvider(File.class)).addDataConsumer((ObserverDataConsumer<File>) dummyDataSink.getDataConsumer(File.class));
 

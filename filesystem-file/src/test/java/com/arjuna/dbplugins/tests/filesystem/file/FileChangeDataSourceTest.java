@@ -43,8 +43,8 @@ public class FileChangeDataSourceTest
             FileChangeDataSource fileChangeDataSource = new FileChangeDataSource(name, properties);
             DummyDataSink        dummyDataSink        = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
 
-            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), fileChangeDataSource, null);
-            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
+            dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), fileChangeDataSource, null);
+            dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
 
             ((ObservableDataProvider<File>) fileChangeDataSource.getDataProvider(File.class)).addDataConsumer((ObserverDataConsumer<File>) dummyDataSink.getDataConsumer(File.class));
 

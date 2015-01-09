@@ -42,8 +42,8 @@ public class DirectoryChangeDataSourceTest
             DirectoryChangeDataSource directoryChangeDataSource = new DirectoryChangeDataSource(name, properties);
             DummyDataSink             dummyDataSink             = new DummyDataSink("Dummy Data Sink", Collections.<String, String>emptyMap());
 
-            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), directoryChangeDataSource, null);
-            dataFlowNodeLifeCycleControl.processCreatedDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
+            dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), directoryChangeDataSource, null);
+            dataFlowNodeLifeCycleControl.completeCreationAndActivateDataFlowNode(UUID.randomUUID().toString(), dummyDataSink, null);
 
             ((ObservableDataProvider<File>) directoryChangeDataSource.getDataProvider(File.class)).addDataConsumer((ObserverDataConsumer<File>) dummyDataSink.getDataConsumer(File.class));
 
