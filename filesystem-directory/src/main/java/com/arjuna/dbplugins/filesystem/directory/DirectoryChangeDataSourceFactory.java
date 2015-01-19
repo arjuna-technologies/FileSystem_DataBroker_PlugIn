@@ -72,7 +72,7 @@ public class DirectoryChangeDataSourceFactory implements DataFlowNodeFactory
                 List<String> propertyNames = new LinkedList<String>();
 
                 propertyNames.add(DirectoryChangeDataSource.DIRECTORYNAME_PROPERYNAME);
-                
+
                 return propertyNames;
             }
             else
