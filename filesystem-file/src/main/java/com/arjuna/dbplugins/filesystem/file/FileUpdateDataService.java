@@ -120,6 +120,7 @@ public class FileUpdateDataService implements DataService
         Set<Class<?>> dataConsumerDataClasses = new HashSet<Class<?>>();
 
         dataConsumerDataClasses.add(String.class);
+        dataConsumerDataClasses.add(byte[].class);
 
         return dataConsumerDataClasses;
     }
@@ -129,7 +130,9 @@ public class FileUpdateDataService implements DataService
     public <T> DataConsumer<T> getDataConsumer(Class<T> dataClass)
     {
         if (String.class.isAssignableFrom(dataClass))
-            return (DataConsumer<T>) _dataConsumer;
+            return (DataConsumer<T>) _dataConsumerString;
+        else if (byte[].class.isAssignableFrom(dataClass))
+            return (DataConsumer<T>) _dataConsumerBytes;
         else
             return null;
     }
@@ -159,8 +162,10 @@ public class FileUpdateDataService implements DataService
     private DataFlow             _dataFlow;
     private String               _name;
     private Map<String, String>  _properties;
-    @DataConsumerInjection(methodName="update")
-    private DataConsumer<String> _dataConsumer;
+    @DataConsumerInjection(methodName="updateString")
+    private DataConsumer<String> _dataConsumerString;
+    @DataConsumerInjection(methodName="updateBytes")
+    private DataConsumer<byte[]> _dataConsumerBytes;
     @DataProviderInjection
     private DataProvider<String> _dataProvider;
 }

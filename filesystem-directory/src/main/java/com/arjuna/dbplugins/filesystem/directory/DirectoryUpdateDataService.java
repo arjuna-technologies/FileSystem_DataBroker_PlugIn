@@ -100,7 +100,7 @@ public class DirectoryUpdateDataService implements DataService
         }
     }
 
-    public void update(String data)
+    public void updateString(String data)
     {
         try
         {
@@ -119,12 +119,32 @@ public class DirectoryUpdateDataService implements DataService
         }
     }
 
+    public void updateBytes(byte[] data)
+    {
+        try
+        {
+            if (_directory != null)
+            {
+                FileOutputStream fileOutputStream = new FileOutputStream(new File(_directory, _fileNamePrefix + UUID.randomUUID().toString() + _fileNamePostfix));
+                fileOutputStream.write(data);
+                fileOutputStream.close();
+            }
+            else
+                logger.log(Level.WARNING, "Problem writing data, directory 'null'");
+        }
+        catch (Throwable throwable)
+        {
+            logger.log(Level.WARNING, "Problem while updating file in directory: " + _directory, throwable);
+        }
+    }
+
     @Override
     public Collection<Class<?>> getDataConsumerDataClasses()
     {
         Set<Class<?>> dataConsumerDataClasses = new HashSet<Class<?>>();
 
         dataConsumerDataClasses.add(String.class);
+        dataConsumerDataClasses.add(byte[].class);
 
         return dataConsumerDataClasses;
     }
@@ -134,7 +154,9 @@ public class DirectoryUpdateDataService implements DataService
     public <T> DataConsumer<T> getDataConsumer(Class<T> dataClass)
     {
         if (String.class.isAssignableFrom(dataClass))
-            return (DataConsumer<T>) _dataConsumer;
+            return (DataConsumer<T>) _dataConsumerString;
+        else if (byte[].class.isAssignableFrom(dataClass))
+            return (DataConsumer<T>) _dataConsumerBytes;
         else
             return null;
     }
@@ -166,8 +188,10 @@ public class DirectoryUpdateDataService implements DataService
     private DataFlow             _dataFlow;
     private String               _name;
     private Map<String, String>  _properties;
-    @DataConsumerInjection(methodName="update")
-    private DataConsumer<String> _dataConsumer;
+    @DataConsumerInjection(methodName="updateString")
+    private DataConsumer<String> _dataConsumerString;
+    @DataConsumerInjection(methodName="updateBytes")
+    private DataConsumer<byte[]> _dataConsumerBytes;
     @DataProviderInjection
     private DataProvider<String> _dataProvider;
 }
