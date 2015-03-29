@@ -19,8 +19,8 @@ import com.arjuna.databroker.data.connector.ObservableDataProvider;
 import com.arjuna.databroker.data.connector.ObserverDataConsumer;
 import com.arjuna.databroker.data.core.DataFlowNodeLifeCycleControl;
 import com.arjuna.dbplugins.filesystem.directory.DirectoryChangeDataSource;
-import com.arjuna.dbutilities.testsupport.dataflownodes.dummy.DummyDataSink;
-import com.arjuna.dbutilities.testsupport.dataflownodes.lifecycle.TestJEEDataFlowNodeLifeCycleControl;
+import com.arjuna.dbutils.testsupport.dataflownodes.dummy.DummyDataSink;
+import com.arjuna.dbutils.testsupport.dataflownodes.lifecycle.TestJEEDataFlowNodeLifeCycleControl;
 
 public class DirectoryChangeDataSourceTest
 {
