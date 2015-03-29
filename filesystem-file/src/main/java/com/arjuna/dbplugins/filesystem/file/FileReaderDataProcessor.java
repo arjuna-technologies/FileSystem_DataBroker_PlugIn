@@ -137,7 +137,7 @@ public class FileReaderDataProcessor implements DataProcessor
         else
             return null;
     }
-    
+
     private DataFlow             _dataFlow;
     private String               _name;
     private Map<String, String>  _properties;

@@ -41,7 +41,7 @@ public class FileUpdateDataService implements DataService
 
         _name       = name;
         _properties = properties;
-        
+
         _file = null;
     }
 
@@ -158,7 +158,7 @@ public class FileUpdateDataService implements DataService
     }
 
     private File _file;
-    
+
     private DataFlow             _dataFlow;
     private String               _name;
     private Map<String, String>  _properties;

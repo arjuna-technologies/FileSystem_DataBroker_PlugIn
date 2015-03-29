@@ -44,7 +44,7 @@ public class DirectoryUpdateDataService implements DataService
 
         _name       = name;
         _properties = properties;
-        
+
         _directory = null;
     }
 

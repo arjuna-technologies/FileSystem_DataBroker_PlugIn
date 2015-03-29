@@ -46,8 +46,8 @@
     </properties>
 
     <modules>
-        <module>filesystem-file</module> 
-        <module>filesystem-directory</module> 
+        <module>filesystem-file</module>
+        <module>filesystem-directory</module>
         <module>filesystem-plugin</module>
         <module>filesystem-plugin-ear</module>
     </modules>

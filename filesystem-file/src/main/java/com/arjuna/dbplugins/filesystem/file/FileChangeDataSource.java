@@ -114,7 +114,7 @@ public class FileChangeDataSource implements DataSource
     {
         _watcher.finish();
     }
-    
+
     private class Watcher extends Thread
     {
         public Watcher(File file)

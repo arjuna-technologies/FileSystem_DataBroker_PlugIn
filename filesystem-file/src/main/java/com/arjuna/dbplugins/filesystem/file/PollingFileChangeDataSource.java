@@ -110,7 +110,7 @@ public class PollingFileChangeDataSource implements DataSource
     {
         _poller.finish();
     }
-    
+
     private class Poller extends Thread
     {
         public Poller(File file, long pollInterval)
@@ -130,7 +130,7 @@ public class PollingFileChangeDataSource implements DataSource
                 while (! _finish)
                 {
                     long newLastModified = _file.lastModified();
-                    
+
                     if (oldLastModified != newLastModified)
                     {
                         _dataProvider.produce(_file);
