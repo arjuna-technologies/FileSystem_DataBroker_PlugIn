@@ -85,6 +85,7 @@ public class DirectoryUpdateDataService implements DataService
     }
 
     @PostCreated
+    @PostRecovery
     @PostConfig
     public void config()
     {
