@@ -21,6 +21,7 @@ import com.arjuna.databroker.data.jee.annotation.DataConsumerInjection;
 import com.arjuna.databroker.data.jee.annotation.DataProviderInjection;
 import com.arjuna.databroker.data.jee.annotation.PostConfig;
 import com.arjuna.databroker.data.jee.annotation.PostCreated;
+import com.arjuna.databroker.data.jee.annotation.PostRecovery;
 
 public class FileUpdateDataService implements DataService
 {
@@ -82,6 +83,7 @@ public class FileUpdateDataService implements DataService
     }
 
     @PostCreated
+    @PostRecovery
     @PostConfig
     public void config()
     {
