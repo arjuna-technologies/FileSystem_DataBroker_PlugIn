@@ -6,19 +6,19 @@
 
 <jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.1">
     <ear-subdeployments-isolated>false</ear-subdeployments-isolated>
-    <sub-deployment name="filesystem-plugin-1.0.0p1m1.jar">
+    <sub-deployment name="filesystem-plugin-1.0.0.jar">
         <dependencies>
             <module name="deployment.databroker.ear.data-common.jar"/>
             <module name="deployment.databroker.ear.data-core-jee.jar"/>
         </dependencies>
     </sub-deployment>
-    <sub-deployment name="filesystem-file-1.0.0p1m1.jar">
+    <sub-deployment name="filesystem-file-1.0.0.jar">
         <dependencies>
             <module name="deployment.databroker.ear.data-common.jar"/>
             <module name="deployment.databroker.ear.data-common-jee.jar"/>
         </dependencies>
     </sub-deployment>
-    <sub-deployment name="filesystem-directory-1.0.0p1m1.jar">
+    <sub-deployment name="filesystem-directory-1.0.0.jar">
         <dependencies>
             <module name="deployment.databroker.ear.data-common.jar"/>
             <module name="deployment.databroker.ear.data-common-jee.jar"/>

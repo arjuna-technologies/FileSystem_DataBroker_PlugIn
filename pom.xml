@@ -9,14 +9,16 @@
 
     <groupId>com.arjuna.dbplugins.filesystem</groupId>
     <artifactId>filesystem-plugin-parent</artifactId>
-    <version>1.0.0p1m1</version>
+    <version>1.0.0</version>
 
     <packaging>pom</packaging>
 
     <name>File System DataBroker PlugIn Parent</name>
 
     <properties>
-        <version.com.arjuna.databroker>1.0.0p1m3l</version.com.arjuna.databroker>
+        <version.com.arjuna.dbplugins.filesystem>1.0.0</version.com.arjuna.dbplugins.filesystem>
+        <version.com.arjuna.databroker>1.0.0</version.com.arjuna.databroker>
+        <version.com.arjuna.dbutils.testsupport>1.0.0</version.com.arjuna.dbutils.testsupport>
 
         <jboss-as.username>username</jboss-as.username>
         <jboss-as.password>password</jboss-as.password>

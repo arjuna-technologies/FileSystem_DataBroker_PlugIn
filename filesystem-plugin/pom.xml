@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.arjuna.dbplugins.filesystem</groupId>
         <artifactId>filesystem-plugin-parent</artifactId>
-        <version>1.0.0p1m1</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>filesystem-plugin</artifactId>
@@ -34,13 +34,13 @@
         <dependency>
             <groupId>com.arjuna.dbplugins.filesystem</groupId>
             <artifactId>filesystem-file</artifactId>
-            <version>1.0.0p1m1</version>
+            <version>${version.com.arjuna.dbplugins.filesystem}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
             <groupId>com.arjuna.dbplugins.filesystem</groupId>
             <artifactId>filesystem-directory</artifactId>
-            <version>1.0.0p1m1</version>
+            <version>${version.com.arjuna.dbplugins.filesystem}</version>
             <type>ejb</type>
         </dependency>
     </dependencies>
