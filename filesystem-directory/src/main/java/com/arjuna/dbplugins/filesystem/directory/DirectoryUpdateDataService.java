@@ -140,6 +140,25 @@ public class DirectoryUpdateDataService implements DataService
         }
     }
 
+    public void updateMap(Map data)
+    {
+        try
+        {
+            if (_directory != null)
+            {
+                FileOutputStream fileOutputStream = new FileOutputStream(new File(_directory, _fileNamePrefix + UUID.randomUUID().toString() + _fileNamePostfix));
+                fileOutputStream.write((byte[]) data.get("data"));
+                fileOutputStream.close();
+            }
+            else
+                logger.log(Level.WARNING, "Problem writing data, directory 'null'");
+        }
+        catch (Throwable throwable)
+        {
+            logger.log(Level.WARNING, "Problem while updating file in directory: " + _directory, throwable);
+        }
+    }
+
     @Override
     public Collection<Class<?>> getDataConsumerDataClasses()
     {
@@ -147,6 +166,7 @@ public class DirectoryUpdateDataService implements DataService
 
         dataConsumerDataClasses.add(String.class);
         dataConsumerDataClasses.add(byte[].class);
+        dataConsumerDataClasses.add(Map.class);
 
         return dataConsumerDataClasses;
     }
@@ -159,6 +179,8 @@ public class DirectoryUpdateDataService implements DataService
             return (DataConsumer<T>) _dataConsumerString;
         else if (byte[].class.isAssignableFrom(dataClass))
             return (DataConsumer<T>) _dataConsumerBytes;
+        else if (Map.class.isAssignableFrom(dataClass))
+            return (DataConsumer<T>) _dataConsumerMap;
         else
             return null;
     }
@@ -194,6 +216,8 @@ public class DirectoryUpdateDataService implements DataService
     private DataConsumer<String> _dataConsumerString;
     @DataConsumerInjection(methodName="updateBytes")
     private DataConsumer<byte[]> _dataConsumerBytes;
+    @DataConsumerInjection(methodName="updateMap")
+    private DataConsumer<Map>    _dataConsumerMap;
     @DataProviderInjection
     private DataProvider<String> _dataProvider;
 }
